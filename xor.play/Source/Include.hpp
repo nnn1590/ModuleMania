@@ -26,5 +26,5 @@
 #include <random>
 #include <iomanip>
 #include <switch.h>
-#include <switch/arm/atomics.h>
+#include <atomic>
 using namespace std;

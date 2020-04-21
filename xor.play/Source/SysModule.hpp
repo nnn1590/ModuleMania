@@ -7,7 +7,7 @@ extern "C"
     char fake_heap[KIP_HEAP];
     void checkErrThrow(Result err)
     {
-        if(R_SUCCEEDED(err)) return;
+        /*if(R_SUCCEEDED(err)) return;
         Handle srv;
         while(R_FAILED(smGetServiceOriginal(&srv, smEncodeName("fatal:u")))) svcSleepThread(1000000000L);
         IpcCommand c;
@@ -26,7 +26,7 @@ extern "C"
         raw->result = err;
         raw->unknown = 0;
         ipcDispatch(srv);
-        svcCloseHandle(srv);
+        svcCloseHandle(srv);*/
     }
     void __libnx_initheap()
     {
@@ -42,7 +42,7 @@ extern "C"
         checkErrThrow(rc);
         u64 pid;
         svcGetProcessId(&pid, CUR_PROCESS_HANDLE);
-        rc = fsprRegisterProgram(pid, KIP_TITLEID, FsStorageId_NandSystem, NULL, 0, NULL, 0);
+        rc = fsprRegisterProgram(pid, KIP_TITLEID, NcmStorageId_BuiltInSystem, NULL, 0, NULL, 0);
         checkErrThrow(rc);
         fsprExit();
     }
@@ -62,12 +62,12 @@ extern "C"
         rc = hidInitialize();
         checkErrThrow(rc);
         Handle hdl;
-        rc = smRegisterService(&hdl, KIP_NAME, false, 1);
+        rc = smRegisterService(&hdl, smEncodeName(KIP_NAME), false, 1);
         checkErrThrow(rc);
     }
     void __appExit()
     {
-        smUnregisterService(KIP_NAME);
+        smUnregisterService(smEncodeName(KIP_NAME));
         fsdevUnmountAll();
         fsExit();
         smExit();
